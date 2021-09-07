@@ -25,7 +25,7 @@
     - [동기식 호출 / 서킷 브레이킹 / 장애격리](#동기식-호출-서킷-브레이킹-장애격리)
     - [오토스케일 아웃](#오토스케일-아웃)
     - [무정지 재배포](#무정지-재배포)
-  - [신규 개발 조직의 추가](#신규-개발-조직의-추가)
+
 
 # 서비스 시나리오
 
@@ -109,7 +109,7 @@ carsharing 커버하기
 
 # 분석/설계
 
-### 완성 모형 및 기능적 요구사항을 커버하는지 검증
+## 완성 모형 및 기능적 요구사항을 커버하는지 검증
 
 ![image](https://user-images.githubusercontent.com/50560622/132271847-5e75b6da-8e04-46c4-b33a-108b0a48af41.png)
 
@@ -123,7 +123,7 @@ carsharing 커버하기
     - 차량 이용 상태를 한 화면에서 확인 할 수 있다.(viewpage) (ok)
 
 
-### 비기능 요구사항에 대한 검증
+## 비기능 요구사항에 대한 검증
 
 ![image](https://user-images.githubusercontent.com/50560622/132272059-dca846fc-6abf-4ba2-afe8-0d7be4a5fd88.png)
 
@@ -276,7 +276,7 @@ carsharing 커버하기
 ![image](https://user-images.githubusercontent.com/50560622/132291282-0de65322-25c6-453f-8a6d-e60b49965684.png)
   
 
-# Correlation
+## Correlation
 
 PolicyHandler에서 처리 시 어떤 건에 대한 처리인지를 구별하기 위한 Correlation-key 구현을 
 이벤트 클래스 안의 변수로 전달받아 서비스간 연관된 처리를 정확하게 구현하고 있습니다. 
@@ -418,13 +418,13 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long>{
 ```
 - 적용 후 REST API 의 테스트
 ```
-# 차량 서비스의 차량 등록
+- 차량 서비스의 차량 등록
 http POST http://localhost:8088/cars id=1 status=available
 
-# reservation 서비스의 차량 렌트
+- reservation 서비스의 차량 렌트
 http POST http://localhost:8088/reservations carId=1 userId=1 
 
-# reservation 서비스의 차량 반납
+- reservation 서비스의 차량 반납
 http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM 
 
 ```
@@ -432,7 +432,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 
 별다른 작업없이 기존의 Entity Pattern 과 Repository Pattern 적용과 데이터베이스 제품의 설정 (pom.xml) 만으로 hsqldb 로 부착시켰다
 '''
-# pom.xml - in payment 인스턴스
+- pom.xml - in payment 인스턴스
 
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -450,7 +450,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 - 차량 서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현 
 
 ```
-# CarService.java
+- CarService.java
 
 package carsharing.external;
 
@@ -525,7 +525,7 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 - 이를 위하여 반납이 요청이 오면 반납 요청되었다는 이벤트를 Kafka 에 송신한다. (Publish)
  
 ```
-# Reservation.java
+- Reservation.java
 
     @PostUpdate
     public void onPostUpdate() {
@@ -542,7 +542,7 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 - 차량 시스템에서는 차량 반납 요청 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다:
 
 ```
-# PolicyHandler.java
+- PolicyHandler.java
 	
 	@Service
 	public class PolicyHandler{
@@ -575,12 +575,11 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 
 차량 서비스가 유지보수로 인해 잠시 내려간 상태더라도 차량을 반납 신청하는데는 문제가 없다.
 ```
-# 차량 서비스 (car) 를 잠시 내려놓음 (ctrl+c)
+- 차량 서비스 (car) 를 잠시 내려놓음 (ctrl+c)
 
-# 차량 반납 요청
+- 차량 반납 요청
 http PATCH http://localhost:8088/reservations/1 usage=100KM #Success
 ![image](https://user-images.githubusercontent.com/50560622/132287982-a089738c-8c87-4313-9907-ddfc315154ec.png)
-
 
 ```
 
