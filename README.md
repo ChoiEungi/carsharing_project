@@ -501,7 +501,8 @@ public interface CarService {
 
 # 차량 렌트
 http POST http://localhost:8088/reservations carId=1 userId=1 #Fail
-![image](https://user-images.githubusercontent.com/50560622/132287223-25f2d38d-305b-44a0-b176-fa6b822fb7dd.png)
+
+  ![image](https://user-images.githubusercontent.com/50560622/132287223-25f2d38d-305b-44a0-b176-fa6b822fb7dd.png)
 
 
 # 차량 서비스 재기동
