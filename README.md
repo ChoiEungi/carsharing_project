@@ -153,7 +153,7 @@ carsharing 커버하기
 차량 별로 Status 에 대하여 고객(Customer)이 조회 할 수 있도록 CQRS 로 구현하였다.
 - reservation, car, payment 개별 Aggregate Status 를 통합 조회하여 성능 Issue 를 사전에 예방할 수 있다.
 - 비동기식으로 처리되어 발행된 이벤트 기반 Kafka 를 통해 수신/처리 되어 별도 Table 에 관리한다
-- Table 모델링 (carList)
+- Table 모델링 (carList)  
   ![image](https://user-images.githubusercontent.com/50560622/132272567-47b3492a-4cc3-4f27-a7c2-c463b54826c1.png)
 - viewpage MSA ViewHandler 를 통해 구현 ("CarRegistered" 이벤트 발생 시, Pub/Sub 기반으로 별도 carList 테이블에 저장)
   ![image](https://user-images.githubusercontent.com/50560622/132285852-022b5d6c-fee6-4564-9acd-0f9faed68743.png)
@@ -282,14 +282,14 @@ PolicyHandler에서 처리 시 어떤 건에 대한 처리인지를 구별하기
 아래의 구현 예제를 보면
 
 차량을 렌트하면 차량관리 에서 차량의 상태가 변경되고, 차량을 반납하면 다시 차량의 상태가 업데이트 되는 것을 확인 할 수 있다.
-
-차량 등록
+  
+차량 등록  
 ![image](https://user-images.githubusercontent.com/50560622/132286171-ecaf2a02-4d61-4480-b8e4-5c83b904d160.png)
-
-차량 렌트 
+  
+차량 렌트  
 ![image](https://user-images.githubusercontent.com/50560622/132286245-f6012c78-1fd6-465b-95e4-4d01db731536.png)
-
-차량 반납
+  
+차량 반납  
 ![image](https://user-images.githubusercontent.com/50560622/132286324-076fb041-13f0-4cbe-9331-44433f6d48aa.png)
 
 
@@ -426,6 +426,20 @@ http POST http://localhost:8088/reservations carId=1 userId=1
 http PATCH http://localhost:8088/reservations/1 usage=100KM 
 
 ```
+## 폴리글랏 퍼시스턴스
+
+별다른 작업없이 기존의 Entity Pattern 과 Repository Pattern 적용과 데이터베이스 제품의 설정 (pom.xml) 만으로 hsqldb 로 부착시켰다
+'''
+# pom.xml - in payment 인스턴스
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+'''
+
+  ![image](https://user-images.githubusercontent.com/50560622/132288500-32d26e5e-8e07-4445-9a11-af639bc506c4.png)
 
 ## 동기식 호출(Sync) 과 Fallback 처리
 
