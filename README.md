@@ -159,7 +159,8 @@ carsharing 커버하기
 - 비동기식으로 처리되어 발행된 이벤트 기반 Kafka 를 통해 수신/처리 되어 별도 Table 에 관리한다
 - Table 모델링 (carList)  
   ![image](https://user-images.githubusercontent.com/50560622/132272567-47b3492a-4cc3-4f27-a7c2-c463b54826c1.png)
-- viewpage MSA ViewHandler 를 통해 구현 ("CarRegistered" 이벤트 발생 시, Pub/Sub 기반으로 별도 carList 테이블에 저장)
+- viewpage MSA ViewHandler 를 통해 구현 ("CarRegistered" 이벤트 발생 시, Pub/Sub 기반으로 별도 carList 테이블에 저장)  
+  
   ![image](https://user-images.githubusercontent.com/50560622/132285852-022b5d6c-fee6-4564-9acd-0f9faed68743.png)
   ![image](https://user-images.githubusercontent.com/50560622/132285923-6678d219-5344-443b-8487-13c32ebc1e6d.png)
 
@@ -435,7 +436,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 
 별다른 작업없이 기존의 Entity Pattern 과 Repository Pattern 적용과 데이터베이스 제품의 설정 (pom.xml) 만으로 hsqldb 로 부착시켰다
 ```
-- pom.xml - in payment 인스턴스
+# pom.xml - in payment 인스턴스
 
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -453,7 +454,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 - 차량 서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현 
 
 ```
-- CarService.java
+# CarService.java
 
 package carsharing.external;
 
@@ -527,7 +528,7 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 - 이를 위하여 반납이 요청이 오면 반납 요청되었다는 이벤트를 Kafka 에 송신한다. (Publish)
  
 ```
-- Reservation.java
+# Reservation.java
 
     @PostUpdate
     public void onPostUpdate() {
@@ -544,7 +545,7 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 - 차량 시스템에서는 차량 반납 요청 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다:
 
 ```
-- PolicyHandler.java
+# PolicyHandler.java
 	
 	@Service
 	public class PolicyHandler{
@@ -570,7 +571,6 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 		    carRepository.save(car);
 		}
 
-
 	    }
 
 ```
@@ -581,9 +581,10 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 
 - 차량 반납 요청
 http PATCH http://localhost:8088/reservations/1 usage=100KM #Success
+```
 ![image](https://user-images.githubusercontent.com/50560622/132287982-a089738c-8c87-4313-9907-ddfc315154ec.png)
 
-```
+
 
 # 운영
 
@@ -594,7 +595,6 @@ http PATCH http://localhost:8088/reservations/1 usage=100KM #Success
 
 
 - 도커 이미지
-
 ![image](https://user-images.githubusercontent.com/50560622/132291359-c1645dc2-7552-4eb4-b8e3-665ce0558bb7.png)
   
   
