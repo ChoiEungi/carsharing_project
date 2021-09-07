@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car
+  labels:
+    app: car
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: car
+  template:
+    metadata:
+      labels:
+        app: car
+    spec:
+      containers:
+        - name: car
+          image: user10.azurecr.io/car:latest
+          ports:
+            - containerPort: 8080
+          args:
+            - /bin/sh
+            - -c
+            - touch /tmp/healthy; sleep 90; rm -rf /tmp/healty; sleep 600
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
+          livenessProbe:
+            # httpGet:
+            #   path: '/actuator/health'
+            #   port: 8080
+            exec:
+              command:
+                - cat
+                - /tmp/healthy
+            initialDelaySeconds: 60
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+            successThreshold: 1
