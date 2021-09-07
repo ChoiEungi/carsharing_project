@@ -431,7 +431,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 ## 폴리글랏 퍼시스턴스
 
 별다른 작업없이 기존의 Entity Pattern 과 Repository Pattern 적용과 데이터베이스 제품의 설정 (pom.xml) 만으로 hsqldb 로 부착시켰다
-'''
+```
 - pom.xml - in payment 인스턴스
 
 		<dependency>
@@ -439,7 +439,7 @@ http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-'''
+```
 
   ![image](https://user-images.githubusercontent.com/50560622/132288500-32d26e5e-8e07-4445-9a11-af639bc506c4.png)
 
@@ -501,10 +501,9 @@ public interface CarService {
 
 # 차량 렌트
 http POST http://localhost:8088/reservations carId=1 userId=1 #Fail
-
+```
   ![image](https://user-images.githubusercontent.com/50560622/132287223-25f2d38d-305b-44a0-b176-fa6b822fb7dd.png)
-
-
+```
 # 차량 서비스 재기동
 cd car
 mvn spring-boot:run
@@ -655,7 +654,7 @@ $ siege -c10 -t60S --content-type "application/json" 'http://20.200.206.77:8080/
 - 운영시스템은 죽지 않고 지속적으로 CB 에 의하여 적절히 회로가 열림과 닫힘이 벌어지면서 자원을 보호하고 있음을 보여줌. 하지만, 61.74% 가 성공한 것은 고객 사용성에 있어 좋지 않기 때문에 Retry 설정과 동적 Scale out (replica의 자동적 추가,HPA) 을 통하여 시스템을 확장 해주는 후속처리가 필요.
 
 
-### 오토스케일 아웃
+## 오토스케일 아웃
 앞서 CB 는 시스템을 안정되게 운영할 수 있게 해줬지만 사용자의 요청을 100% 받아들여주지 못했기 때문에 이에 대한 보완책으로 자동화된 확장 기능을 적용하고자 한다. 
 
 
@@ -783,9 +782,23 @@ livenessProbe에 'cat /tmp/healthy'으로 검증하도록 함
 ```
 ![deployment yml tmp healthy](https://user-images.githubusercontent.com/38099203/119318677-8ff0f300-bcb4-11eb-950a-e3c15feed325.PNG)
 
-- kubectl describe pod room -n airbnb 실행으로 확인
 ```
 컨테이너 실행 후 90초 동인은 정상이나 이후 /tmp/healthy 파일이 삭제되어 livenessProbe에서 실패를 리턴하게 됨
+kubectl describe pod/car-695c6b96d4-zrfql 
+
+Events:
+  Type     Reason     Age                 From                                        Message
+  ----     ------     ----                ----                                        -------
+  Normal   Scheduled  <unknown>                                                       Successfully assigned default/car-695c6b96d4-zrfql to aks-agentpool-34768182-vmss000001
+  Normal   Pulled     36m                 kubelet, aks-agentpool-34768182-vmss000001  Successfully pulled image "user10.azurecr.io/car:latest" in 336.692819ms
+  Normal   Pulled     35m                 kubelet, aks-agentpool-34768182-vmss000001  Successfully pulled image "user10.azurecr.io/car:latest" in 452.215408ms
+  Normal   Created    34m (x3 over 36m)   kubelet, aks-agentpool-34768182-vmss000001  Created container car
+  Normal   Started    34m (x3 over 36m)   kubelet, aks-agentpool-34768182-vmss000001  Started container car
+  Normal   Killing    34m (x2 over 35m)   kubelet, aks-agentpool-34768182-vmss000001  Container car failed liveness probe, will be restarted
+  Normal   Pulling    34m (x3 over 36m)   kubelet, aks-agentpool-34768182-vmss000001  Pulling image "user10.azurecr.io/car:latest"
+  Normal   Pulled     34m                 kubelet, aks-agentpool-34768182-vmss000001  Successfully pulled image "user10.azurecr.io/car:latest" in 279.741625ms
+  Warning  Unhealthy  31m (x16 over 35m)  kubelet, aks-agentpool-34768182-vmss000001  Liveness probe failed: cat: can't open '/tmp/healthy': No such file or directory
+  
 pod 정상 상태 일때 pod 진입하여 /tmp/healthy 파일 생성해주면 정상 상태 유지됨
 ```
 
@@ -793,7 +806,7 @@ pod 정상 상태 일때 pod 진입하여 /tmp/healthy 파일 생성해주면 �
 ![image](https://user-images.githubusercontent.com/50560622/132302367-e7673f8c-a1aa-40e6-acb6-d07e6ed0d79f.png)
 
 
-# Config Map/ Persistence Volume
+## Config Map/ Persistence Volume
 - Persistence Volume
 1. persist volume claim 생성
 - pvc.yaml
