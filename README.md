@@ -425,7 +425,7 @@ http POST http://localhost:8088/cars id=1 status=available
 http POST http://localhost:8088/reservations carId=1 userId=1 
 
 # reservation 서비스의 차량 반납
-http PATCH http://localhost:8088/reservations/1 usage=100KM 
+http PATCH http://localhost:8088/reservations/1 carId=1 usage=100KM 
 
 ```
 ## 폴리글랏 퍼시스턴스
