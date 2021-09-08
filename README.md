@@ -561,7 +561,7 @@ http POST http://localhost:8088/reservations carId=1 userId=1   #Success
 		    /////////////////////////////////////////////
 		    // 반납 요청이 왔을 때 -> status -> available
 		    /////////////////////////////////////////////
-		    System.out.println("##### listener vaccineRegistered : " + carReturned.toJson());
+		    System.out.println("##### listener carReturned : " + carReturned.toJson());
 		    Car car = new Car();
 
 		    car.setId(carReturned.getId());
